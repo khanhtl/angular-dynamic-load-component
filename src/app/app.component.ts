@@ -1,7 +1,5 @@
 import {
   Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
   ComponentRef,
   ViewChild,
   ViewContainerRef,
@@ -23,13 +21,9 @@ export class AppComponent {
   lazyComponent!: ComponentRef<any>;
   newComponent!: ComponentRef<any>;
 
-  constructor(private resolver: ComponentFactoryResolver) {}
-
   load() {
     this.removeDynamicComponent();
-    const componentFactory =
-      this.resolver.resolveComponentFactory(DynamicComponent);
-    const component = this.entry.createComponent(componentFactory);
+    const component = this.entry.createComponent(DynamicComponent);
     setTimeout(() => {
       component.instance.title =
         component.instance.title + ' Has Changed from dynamic load component';
@@ -45,9 +39,7 @@ export class AppComponent {
     const newComponent = await import('./new/new.component').then(
       (m) => m.NewComponent
     );
-    const componentFactory =
-      this.resolver.resolveComponentFactory(newComponent);
-    this.newComponent = this.entryLazy.createComponent(componentFactory);
+    this.newComponent = this.entryLazy.createComponent(newComponent);
   }
 
   move() {
@@ -59,8 +51,7 @@ export class AppComponent {
     const lazy = await import('./lazy/lazy.component').then(
       (m) => m.LazyComponent
     );
-    const componentFactory = this.resolver.resolveComponentFactory(lazy);
-    this.lazyComponent = this.entryLazy.createComponent(componentFactory);
+    this.lazyComponent = this.entryLazy.createComponent(lazy);
   }
 
   removeDynamicComponent() {
